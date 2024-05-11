@@ -2,6 +2,9 @@
 using AVBooksStore.Models.ServiceModel;
 using BusinessLayer.BusinessServices.UserService;
 using BusinessLayer.IBusinessServices.UserService;
+using RepositoryLayer.DatabaseServices;
+using RepositoryLayer.IRepositoryServices;
+using RepositoryLayer.RepositoryServices;
 
 namespace AVBooksStore.Extension
 {
@@ -10,7 +13,24 @@ namespace AVBooksStore.Extension
         public static WebApplicationBuilder AddDomainServices(this WebApplicationBuilder builder) 
         {
             builder.Services.Configure<DomainServices>(builder.Configuration.GetSection("DomainSetting"));
+
+            #region BusinessServices
+
             builder.Services.AddScoped<IUserServices, UserServices>();
+
+            #endregion
+            #region Repository Services
+
+            builder.Services.AddScoped<IUserRepoServices, UserRepoServices>();
+
+            #endregion
+
+            #region DB Service
+
+            builder.Services.AddSingleton<DBService>();
+
+            #endregion
+
             return builder;
         }
 

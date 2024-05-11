@@ -5,7 +5,7 @@ namespace BusinessLayer.IBusinessServices.UserService
 {
     public interface IUserServices
     {
-        Task<UserInfo> UserDetails(SignIn Request);
+        Task<UserInfo> UserDetails(SignIn Request,int id);
 
     }
 }
