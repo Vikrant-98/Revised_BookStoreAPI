@@ -9,10 +9,7 @@ namespace RepositoryLayer.DatabaseServices
 
         }
 
-        public async Task<List<UserDetails>> GetAllUserDetails() 
-        {
-            UserDetails user = new UserDetails() {FirstName = "Vikrant",Gender = "Male",Email = "vikrant@gmail.com",Id = 1,Role = "Admin"};
-            List<UserDetails> userDetails = new List<UserDetails>() 
+        List<UserDetails> userDetails = new List<UserDetails>()
             {
                 new UserDetails() {FirstName = "Vikrant",Gender = "Male",Email = "vikrant@gmail.com",Id = 0,Role = "Admin"},
                 new UserDetails() {FirstName = "Vikrant1",Gender = "Male",Email = "vikrant1@gmail.com",Id = 1,Role = "User"},
@@ -26,8 +23,12 @@ namespace RepositoryLayer.DatabaseServices
                 new UserDetails() {FirstName = "Vikrant9",Gender = "Male",Email = "vikrant9@gmail.com",Id = 9,Role = "User"},
                 new UserDetails() {FirstName = "Vikrant10",Gender = "Male",Email = "vikrant10@gmail.com",Id = 10,Role = "User"}
             };
+
+        public async Task<List<UserDetails>> GetAllUserDetails() 
+        {
             return userDetails;
         }
+
 
     }
 }
