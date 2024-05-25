@@ -40,12 +40,14 @@ namespace AVBooksStore.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("SignUp")]
-        public Response<object> Post([FromBody] SignupRequest Request)
+        public async Task<Response<CommonResponse>> Post([FromBody] SignupRequest Request)
         {
-            return new Response<object>()
+            var result = await _userServices.RegisterUser(Request).ConfigureAwait(false);
+            return new Response<CommonResponse>()
             {
                 Message = "User Registered Succesfully",
-                Status = 0
+                Status = 0,
+                Data = result
             };
         }        
     }

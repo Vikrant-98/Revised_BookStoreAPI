@@ -1,6 +1,9 @@
-﻿using BusinessLayer.IBusinessServices.UserService;
+﻿using BusinessLayer.BusinessServices.Validation;
+using BusinessLayer.IBusinessServices.UserService;
+using CommonLibrary.CommonServices;
 using ModelsLibrary.BusinessModels;
 using ModelsLibrary.Models.RequestModel;
+using ModelsLibrary.Models.ResponseModel;
 using RepositoryLayer.IRepositoryServices;
 
 namespace BusinessLayer.BusinessServices.UserService
@@ -8,9 +11,11 @@ namespace BusinessLayer.BusinessServices.UserService
     public class UserServices : IUserServices
     {
         private readonly IUserRepoServices _userRepoServices;
-        public UserServices(IUserRepoServices userRepoServices)
+        private readonly SignupValidator _signupValidator;
+        public UserServices(IUserRepoServices userRepoServices, SignupValidator signupValidator)
         {
             _userRepoServices = userRepoServices;
+            _signupValidator = signupValidator;
         }
 
         public async Task<UserInfo> UserDetails(SignIn Request, int id)
@@ -20,6 +25,22 @@ namespace BusinessLayer.BusinessServices.UserService
             {
                 UserName = result.FirstName,
                 Role = result.Role
+            };
+        }
+
+        public async Task<CommonResponse> RegisterUser(SignupRequest User) 
+        {
+            var validationResult = _signupValidator.Validate(User);
+            if (validationResult.IsValid)
+            {
+                User.Password = Common.EncodePasswordToBase64(User.Password);
+                var result = await _userRepoServices.RegisterUser(User).ConfigureAwait(false);
+                return result;
+            }
+            return new CommonResponse() 
+            {
+                IsSuccess = false,
+                Message = ""
             };
         }
 

@@ -1,7 +1,10 @@
 ﻿using AVBooksStore.Middlewares;
 using AVBooksStore.Models.ServiceModel;
 using BusinessLayer.BusinessServices.UserService;
+using BusinessLayer.BusinessServices.Validation;
 using BusinessLayer.IBusinessServices.UserService;
+using MapObjectLibrary.DBMapping.IMapping;
+using MapObjectLibrary.DBMapping.Mapping;
 using RepositoryLayer.DatabaseServices;
 using RepositoryLayer.IRepositoryServices;
 using RepositoryLayer.RepositoryServices;
@@ -25,9 +28,15 @@ namespace AVBooksStore.Extension
 
             #endregion
 
+            #region Mapping services
+            builder.Services.AddScoped<IDatabaseMapper, DatabaseMapper>();
+            builder.Services.AddScoped<SignupValidator>();
+            #endregion
+
             #region DB Service
 
-            builder.Services.AddSingleton<DBService>();
+            builder.Services.AddSingleton<DBService>(_ => new DBService(builder.Configuration.GetSection("ConnectionString").Get<string>()));
+
 
             #endregion
 

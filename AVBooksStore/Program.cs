@@ -1,5 +1,4 @@
 using AVBooksStore.Extension;
-using AVBooksStore.Models.ServiceModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
