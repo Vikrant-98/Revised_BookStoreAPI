@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.IBusinessServices.UserService;
+using CommonLibrary.ValidationServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModelsLibrary.BusinessModels;
 using ModelsLibrary.Models.RequestModel;
 using ModelsLibrary.Models.ResponseModel;
 
@@ -22,19 +24,15 @@ namespace AVBooksStore.Controllers
         [Route("SignIn")]
         public async Task<ActionResult> SignIn([FromBody] SignIn Request)
         {//login logic
-            var result = await _userServices.UserDetails(Request,1);
+            var result = await _userServices.ValidateUserDetails(Request);
 
-            return Ok( new Response<SignInResponse>()
+            return Ok(new Response<UserInfo>()
             {
-                Message = "success",
-                Status = 0,
-                Data = new SignInResponse() 
-                { 
-                    UserName = result.UserName,
-                    EmailId = Request.UserId,
-                    Token = "" 
-                }
+                Message = ValidationMessages.GetExternalMessage(result.ResponseMessage),
+                Status = ValidationMessages.GetExternalCode(result.ResponseMessage),
+                Data = result
             });
+
         }
 
         [AllowAnonymous]
@@ -45,8 +43,8 @@ namespace AVBooksStore.Controllers
             var result = await _userServices.RegisterUser(Request).ConfigureAwait(false);
             return new Response<CommonResponse>()
             {
-                Message = "User Registered Succesfully",
-                Status = 0,
+                Message = ValidationMessages.Success,
+                Status = ValidationMessages.GetExternalCode(ValidationMessages.Success),
                 Data = result
             };
         }        

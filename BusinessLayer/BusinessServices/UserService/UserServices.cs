@@ -1,10 +1,12 @@
 ﻿using BusinessLayer.BusinessServices.Validation;
 using BusinessLayer.IBusinessServices.UserService;
 using CommonLibrary.CommonServices;
+using CommonLibrary.ValidationServices;
 using ModelsLibrary.BusinessModels;
 using ModelsLibrary.Models.RequestModel;
 using ModelsLibrary.Models.ResponseModel;
 using RepositoryLayer.IRepositoryServices;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessLayer.BusinessServices.UserService
 {
@@ -18,14 +20,37 @@ namespace BusinessLayer.BusinessServices.UserService
             _signupValidator = signupValidator;
         }
 
-        public async Task<UserInfo> UserDetails(SignIn Request, int id)
+        public async Task<UserInfo> ValidateUserDetails(SignIn Request)
         {
-            var result = await _userRepoServices.GetUserDetails(id).ConfigureAwait(false);
-            return new UserInfo()
+            try
             {
-                UserName = result.FirstName,
-                Role = result.Role
-            };
+                Request.Password = Common.EncodePasswordToBase64(Request.Password);
+                var result = await _userRepoServices.ValidateUser(Request).ConfigureAwait(false);
+
+                if (result.status)
+                {
+                    var TokenResult = TokenService.GenerateJwtToken(result.userDetails);
+                    return new UserInfo()
+                    {
+                        ResponseMessage = ValidationMessages.Success,
+                        Status = true,
+                        UserDetails = result.userDetails,
+                        Token = TokenResult.Item1,
+                        TokenValidTill = TokenResult.Item2.ToString()
+                    };
+                }
+
+                return new UserInfo()
+                {
+                    ResponseMessage = ValidationMessages.GetExternalMessage(result?.responseMessage),
+                    Status = false,
+                    UserDetails = result?.userDetails
+                };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<CommonResponse> RegisterUser(SignupRequest User) 

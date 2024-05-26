@@ -4,8 +4,11 @@ namespace CommonLibrary.CommonServices
 {
     public class Common
     {
+        private const string registerUser = "spAddUserDetail";
+        private const string validateUser = "spValidateUser";
 
-        public const string RegistedUser = "spAddUserDetail";
+        public const string RegistedUser = registerUser;
+        public const string ValidateUser = validateUser;
         public static string EncodePasswordToBase64(string Password)
         {
             try

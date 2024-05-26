@@ -6,7 +6,7 @@ namespace RepositoryLayer.IRepositoryServices
 {
     public interface IUserRepoServices
     {
-        Task<UserDetails> GetUserDetails(int id);
+        Task<RetriveUserDetails> ValidateUser(SignIn User);
         Task<CommonResponse> RegisterUser(SignupRequest User);
     }
 }

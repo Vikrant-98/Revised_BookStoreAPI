@@ -1,11 +1,7 @@
 ﻿using MapObjectLibrary.DBMapping.IMapping;
+using ModelsLibrary.DataBaseModels.TempModel;
 using ModelsLibrary.Models.ResponseModel;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MapObjectLibrary.DBMapping.Mapping
 {
@@ -24,5 +20,19 @@ namespace MapObjectLibrary.DBMapping.Mapping
             }
             return addResponse;
         }
+
+        public UserDetails MapUserDetails(string[] UserDetails) 
+        { 
+            return new UserDetails() 
+            {
+                FirstName = UserDetails[0],
+                LastName = UserDetails[1],
+                Mobile = UserDetails[2],
+                Email = UserDetails[3],
+                Gender = UserDetails[4],
+                Role = UserDetails[5]
+            }; 
+        }
+
     }
 }

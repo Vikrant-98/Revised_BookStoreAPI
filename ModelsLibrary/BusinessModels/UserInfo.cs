@@ -1,8 +1,13 @@
-﻿namespace ModelsLibrary.BusinessModels
+﻿using ModelsLibrary.DataBaseModels.TempModel;
+
+namespace ModelsLibrary.BusinessModels
 {
     public class UserInfo
     {
-        public string UserName { get; set; }
-        public string Role { get; set; }
+        public UserDetails? UserDetails { get; set; }
+        public string? ResponseMessage { get; set; }
+        public bool Status { get; set; }
+        public string? Token { get; set; }
+        public string? TokenValidTill { get; set; }
     }
 }

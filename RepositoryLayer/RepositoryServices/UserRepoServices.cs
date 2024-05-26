@@ -58,9 +58,50 @@ namespace RepositoryLayer.RepositoryServices
         }
 
 
-        public async Task<UserDetails> GetUserDetails(int id) 
+        public async Task<RetriveUserDetails> ValidateUser(SignIn User) 
         {
-            return null;
+            SqlDataReader dataReader;
+            CommonResponse? response = new CommonResponse();
+            try
+            {
+                using (SqlCommand command = new SqlCommand(Common.ValidateUser, _dbService.Connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Password", User.Password);
+                    command.Parameters.AddWithValue("@UserId", User.UserId);
+
+                    _dbService.Connection.Open();
+                    dataReader = await command.ExecuteReaderAsync();
+                    response = _IDatabaseMapper.AddUpdateDeleteResponse(dataReader);
+
+                };
+
+                if (response.IsSuccess)
+                {
+                    var splitResponse = response.Message.Split(" ");
+                    var mapDetails = _IDatabaseMapper.MapUserDetails(splitResponse);
+                    return new RetriveUserDetails()
+                    {
+                        userDetails = mapDetails,
+                        status = true
+                    };
+                }
+                
+                return new RetriveUserDetails()
+                {
+                    userDetails = null,
+                    responseMessage = response.Message,
+                    status = false
+                };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                _dbService.Connection.Close();
+            }
         }
 
     }
