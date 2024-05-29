@@ -35,10 +35,10 @@ namespace AVBooksStore.Controllers
 
         }
 
-        [AllowAnonymous]
+        //[Authorize]
         [HttpPost]
         [Route("SignUp")]
-        public async Task<Response<CommonResponse>> Post([FromBody] SignupRequest Request)
+        public async Task<Response<CommonResponse>> SignUp([FromBody] SignupRequest Request)
         {
             var result = await _userServices.RegisterUser(Request).ConfigureAwait(false);
             return new Response<CommonResponse>()
@@ -47,6 +47,18 @@ namespace AVBooksStore.Controllers
                 Status = ValidationMessages.GetExternalCode(ValidationMessages.Success),
                 Data = result
             };
-        }        
+        }
+
+        [Authorize]
+        [HttpPost("PostTest")]
+        public async Task<Response<string>> PostTest([FromBody] SignupRequest Request)
+        {
+            return new Response<string>()
+            {
+                Message = ValidationMessages.Success,
+                Status = ValidationMessages.GetExternalCode(ValidationMessages.Success),
+                Data = string.Empty
+            };
+        }
     }
 }

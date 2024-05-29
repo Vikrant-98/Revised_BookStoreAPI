@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace AVBooksStore.Middlewares
@@ -16,17 +18,57 @@ namespace AVBooksStore.Middlewares
 
         public Task Invoke(HttpContext httpContext)
         {
-            var tt = httpContext.Request.Body;
-            return _next(httpContext);
+            try
+            {
+                httpContext.Request.EnableBuffering();
+                var bodyAsText = new StreamReader(httpContext.Request.Body).ReadToEndAsync().Result;
+                httpContext.Request.Body.Position = 0;
+                var result = JsonConvert.DeserializeObject<dynamic>(bodyAsText);
+                if (result != null && !httpContext.Request.Headers.ContainsKey("Authorization"))
+                {
+                    var token = ExtractTokenFromJson(bodyAsText);
+                    if (!string.IsNullOrEmpty(token))
+                        httpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
+                }
+                return _next(httpContext);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+        }
+        private string ExtractTokenFromJson(string json)
+        {
+            // Implement your logic to extract the token from the JSON payload
+            // This will depend on the structure of your JSON payload
+            // For example, if the token is in the "SecurityToken" property:
+            var jsonObject = JObject.Parse(json);
+            return (string)jsonObject["SecurityToken"];
+
+            // Replace this with your own implementation
+            // return "";
         }
     }
+
+    
 
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class MiddlewareExtensions
     {
         public static IApplicationBuilder UseMiddleware(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<Middleware>();
+            try
+            {
+                return builder.UseMiddleware<Middleware>();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
         }
     }
 }

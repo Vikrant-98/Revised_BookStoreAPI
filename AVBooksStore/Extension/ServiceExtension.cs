@@ -5,6 +5,8 @@ using BusinessLayer.BusinessServices.Validation;
 using BusinessLayer.IBusinessServices.UserService;
 using MapObjectLibrary.DBMapping.IMapping;
 using MapObjectLibrary.DBMapping.Mapping;
+using Microsoft.OpenApi.Models;
+using NSwag;
 using RepositoryLayer.DatabaseServices;
 using RepositoryLayer.IRepositoryServices;
 using RepositoryLayer.RepositoryServices;
@@ -33,6 +35,10 @@ namespace AVBooksStore.Extension
             builder.Services.AddScoped<SignupValidator>();
             #endregion
 
+            #region swagger services
+            builder.AddSwaggerService();
+            #endregion
+
             #region DB Service
 
             builder.Services.AddSingleton<DBService>(_ => new DBService(builder.Configuration.GetSection("ConnectionString").Get<string>()));
@@ -43,23 +49,57 @@ namespace AVBooksStore.Extension
             return builder;
         }
 
+        private static WebApplicationBuilder AddSwaggerService(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddOpenApiDocument(settings =>
+            {
+                settings.Title = "Book Store API.";
+                settings.AddSecurity("Bearer", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = OpenApiSecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = OpenApiSecurityApiKeyLocation.Header
+                });
+            });
+            return builder;
+        }
+
         public static WebApplication WebApplicationPipeline(this WebApplication app) 
         {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
 
-            app.UseHttpsRedirection();
+          
 
             app.UseMiddleware();
 
+            app.UseJWTMiddleware();
+
+            app.UseHttpsRedirection();
+
             app.UseAuthorization();
+
+            app.UseAuthentication();
+
+            app.UseSwaggerService();
 
             app.MapControllers();
 
             return app;
         }
+        private static IApplicationBuilder UseSwaggerService(this IApplicationBuilder app)
+        {
+            app.UseOpenApi(a =>
+            {
+                a.PostProcess = (document, _) =>
+                {
+                    document.Schemes = new[] { NSwag.OpenApiSchema.Https, NSwag.OpenApiSchema.Http };
+                };
+
+            });
+            app.UseSwaggerUi3();
+            return app;
+        }
+
     }
 }
