@@ -69,21 +69,18 @@ namespace AVBooksStore.Extension
         public static WebApplication WebApplicationPipeline(this WebApplication app) 
         {
 
-          
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
 
             app.UseMiddleware();
 
             app.UseJWTMiddleware();
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.UseAuthentication();
-
             app.UseSwaggerService();
 
-            app.MapControllers();
 
             return app;
         }

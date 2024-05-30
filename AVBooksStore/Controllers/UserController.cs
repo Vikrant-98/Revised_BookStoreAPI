@@ -1,10 +1,11 @@
 ﻿using BusinessLayer.IBusinessServices.UserService;
 using CommonLibrary.ValidationServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelsLibrary.BusinessModels;
 using ModelsLibrary.Models.RequestModel;
 using ModelsLibrary.Models.ResponseModel;
+using Poppins.POS.Api.Resources.Middlewares.CustomJWTMiddleware;
+using static Poppins.POS.Api.Resources.Middlewares.CustomJWTMiddleware.AuthorizeAttribute;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,6 +51,7 @@ namespace AVBooksStore.Controllers
         }
 
         [Authorize]
+        //[AllowAnonymous]
         [HttpPost("PostTest")]
         public async Task<Response<string>> PostTest([FromBody] SignupRequest Request)
         {
