@@ -1,0 +1,127 @@
+﻿CREATE TABLE [dbo].[Users](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[first_name] [varchar](255) NULL,
+	[last_name] [varchar](255) NULL,
+	[mobile_number] [varchar](255) NULL,
+	[email_id] [varchar](255) NULL,
+	[user_password] [varchar](255) NULL,
+	[gender] [varchar](10) NULL,
+	[user_role] [varchar](255) NOT NULL,
+	[creation_date] [datetime] NULL)
+
+CREATE TABLE [dbo].[Books](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[book_name] [varchar](255) NULL,
+	[description] [varchar](1000) NULL,
+	[image] [varchar](5000) NULL,
+	[admin_id] [int] NULL,
+	[is_active] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+CREATE TABLE [dbo].[BooksDetails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[publisher_id] [int] NULL,
+	[author_id] [int] NULL,
+	[quantity_available] [int] NULL,
+	[price] [decimal] NULL,
+	[offer_available] [bit],
+	[offer_id] [int],
+	[is_active] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+CREATE TABLE [dbo].[PublisherDetails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[agency_name] [varchar](1000) NULL,
+	[contact_name] [varchar](1000) NULL,
+	[contact_number] [varchar](20) NULL,
+	[offer_id] [int] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+CREATE TABLE [dbo].[AuthorDetails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[author_name] [varchar](255) NULL,
+	[author_number] [varchar](20) NULL,
+	[about_author] [varchar](5000) NULL,
+	[rating] [int] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+CREATE TABLE [dbo].[AddressDetails](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NULL,
+	[address_lane1] [varchar](1000) NULL,
+	[address_lane2] [varchar](1000) NULL,
+	[pincode] [varchar](10) NULL,
+	[contact_name] [varchar](1000) NULL,
+	[contact_number] [varchar](20) NULL,
+	[landmark] [varchar](1000) NULL,
+	[location] [varchar](1000) NULL,
+	[state] [varchar](5000) NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[Offers](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](1000) NULL,
+	[description] [varchar](1000) NULL,
+	[discount_rate] [decimal] NULL,
+	[user_id] [int] NULL,
+	[is_active] [bit] NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[Cart](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NULL,
+	[cart_item_id] [int] NULL,
+	[is_active] [bit] NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[CartItem](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[book_id] [int] NULL,
+	[quantity] [int] NULL,
+	[total_price] [decimal] NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[WishList](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NULL,
+	[Wish_list_item_id] [int] NULL,
+	[is_active] [bit] NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[WishItem](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[book_id] [int] NULL,
+	[quantity] [int] NULL,
+	[total_price] [decimal] NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);
+
+	CREATE TABLE [dbo].[Orders](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[cart_id] [int] NULL,
+	[offer_id] [int] NULL,
+	[address_id] [int] NULL,
+	[delivery_vendor_id] [int] NULL,
+	[final_price] [decimal] NULL,
+	[payment_mode] [varchar](10) NULL,
+	[payment_type] [varchar](10) NULL,
+	[is_order_placed] [bit] NULL,
+	[delivery_status] [varchar](225) NULL,
+	[is_deleted] [bit] NULL,
+	[creation_date] [datetime] NULL,
+	[updation_date] [datetime] NULL);

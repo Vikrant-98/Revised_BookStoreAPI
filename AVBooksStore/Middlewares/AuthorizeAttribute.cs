@@ -10,12 +10,12 @@ namespace Poppins.POS.Api.Resources.Middlewares.CustomJWTMiddleware
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            // skip authorization if action is decorated with [AllowAnonymous] attribute
+            //skip authorization if action is decorated with [AllowAnonymous] attribute
             //if (context.HttpContext.Response.StatusCode != StatusCodes.Status200OK)
             //{
             //    SetUnauthorizedResponse(context, "");
             //    return;
-            //} 
+            //}
             //if (context.HttpContext.Request.Headers[Common.ProgramCode].FirstOrDefault() == null && context.HttpContext.Request.Headers[Common.TenantID].FirstOrDefault() == null && context.HttpContext.Request.Headers[Common.TenantCode].FirstOrDefault() == null)
             //{
             //    SetUnauthorizedResponse(context, StatusManager.SecurityTokenVerificationFailed);
