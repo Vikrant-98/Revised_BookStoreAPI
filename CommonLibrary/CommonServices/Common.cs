@@ -5,9 +5,13 @@ namespace CommonLibrary.CommonServices
     public class Common
     {
         private const string registerUser = "spAddUserDetail";
+        private const string registerAuthor = "spAddAuthorDetails";
+        private const string registerPublisher = "spAddPublisherDetails";
         private const string validateUser = "spValidateUser";
 
         public const string RegistedUser = registerUser;
+        public const string RegistedAuthor = registerAuthor;
+        public const string RegisterPublisher = registerPublisher;
         public const string ValidateUser = validateUser;
         public static string EncodePasswordToBase64(string Password)
         {

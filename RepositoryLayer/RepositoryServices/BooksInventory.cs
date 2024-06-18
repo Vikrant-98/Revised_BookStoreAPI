@@ -9,5 +9,6 @@ namespace RepositoryLayer.RepositoryServices
 {
     public class BooksInventory : IBooksInventory
     {
+
     }
 }

@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\MappingModel\" />
-    <Folder Include="Models\ServiceModel\" />
+    <Compile Remove="Models\MappingModel\**" />
+    <Compile Remove="Models\ServiceModel\**" />
+    <EmbeddedResource Remove="Models\MappingModel\**" />
+    <EmbeddedResource Remove="Models\ServiceModel\**" />
+    <None Remove="Models\MappingModel\**" />
+    <None Remove="Models\ServiceModel\**" />
   </ItemGroup>
 
 </Project>
